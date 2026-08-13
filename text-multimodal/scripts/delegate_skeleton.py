@@ -37,7 +37,7 @@ CONFIG = {
     'videoGenModel': '',      # 视频生成模型
     'outputBaseURL': '',      # 任务式接口的存储桶地址（如无可留空）
     'keyEnv': 'MM_API_KEY',   # 密钥所在环境变量名
-    'keyFile': None,          # 或本地凭据文件路径（如 ~/.zcode/keys.json）
+    'keyFile': None,          # 或本地凭据文件路径（如 ~/.config/keys.json）
 }
 
 
