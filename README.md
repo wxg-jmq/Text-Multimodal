@@ -1,4 +1,4 @@
-# Text-Multimodal — 把文本模型升级为多模态助手
+# text-multimodal — 把文本模型升级为多模态助手
 
 一套开箱即用的 **SKILL**：任何文本模型助手（Claude / ChatGPT / Gemini / Cursor / Copilot / ZCode / 本地模型……）加载后，即可从零构建完整的多模态能力体系——**看图、识视频、生成图片、生成视频**，且所有结果尽量在聊天窗口中内联预览。
 
@@ -25,23 +25,25 @@
 ## 目录结构
 
 ```
-Text-Multimodal/
-├── SKILL.md                 # 主文件：流程速览、铁律、完成定义（触发即加载）
-├── references/
-│   ├── matching.md          # 模型来源全流程（先查后要、安全承诺、自动匹配）
-│   ├── steps.md             # 阶段 0~4、7 施工细节 + 提示词撰写规范
-│   ├── display.md           # 展示规范 + 客户端内联渲染补丁
-│   └── pitfalls.md          # 踩坑清单（实测踩坑，直接遵守）
-├── scripts/
-│   ├── vision_probe.py      # 纯色探测图生成器（验证模型能否看图）
-│   └── delegate_skeleton.py # 委托脚本骨架（适配器模式）
-└── assets/
-    └── tables.md            # 能力表 / 匹配表模板
+Text-Multimodal/             # 仓库根（克隆后的目录名 = 仓库名）
+├── README.md                # 本说明
+└── text-multimodal/         # 技能目录（安装时复制这一层）
+    ├── SKILL.md             # 主文件：流程速览、铁律、完成定义（触发即加载）
+    ├── references/
+    │   ├── matching.md      # 模型来源全流程（先查后要、安全承诺、自动匹配）
+    │   ├── steps.md         # 阶段 0~4、7 施工细节 + 提示词撰写规范
+    │   ├── display.md       # 展示规范 + 客户端内联渲染补丁
+    │   └── pitfalls.md      # 踩坑清单（实测踩坑，直接遵守）
+    ├── scripts/
+    │   ├── vision_probe.py  # 纯色探测图生成器（验证模型能否看图）
+    │   └── delegate_skeleton.py # 委托脚本骨架（适配器模式）
+    └── assets/
+        └── tables.md        # 能力表 / 匹配表模板
 ```
 
 ## 安装
 
-技能本质是一个目录：`Text-Multimodal/`（内含 `SKILL.md` + `references/` + `scripts/` + `assets/`）。安装 = 把这个目录放到你的 Agent 能发现技能的位置，或把 `SKILL.md` 全文发给助手。以下方法任选其一。
+技能本质是一个目录：`text-multimodal/`（内含 `SKILL.md` + `references/` + `scripts/` + `assets/`，即克隆后仓库里的 `text-multimodal/` 文件夹）。安装 = 把这个目录放到你的 Agent 能发现技能的位置，或把 `SKILL.md` 全文发给助手。以下方法任选其一。
 
 ### 方法一：git clone + 复制到技能目录（推荐，便于更新）
 
@@ -50,33 +52,33 @@ Text-Multimodal/
 git clone https://github.com/wxg-jmq/Text-Multimodal.git
 cd Text-Multimodal
 
-# 2. 复制到用户级技能目录（全局可用，所有支持技能的 Agent 通用）
+# 2. 复制技能目录到用户级位置（全局可用，所有支持技能的 Agent 通用）
 mkdir -p ~/.agents/skills
-cp -r Text-Multimodal ~/.agents/skills/
+cp -r text-multimodal ~/.agents/skills/
 
 # 或复制到项目级技能目录（仅当前项目生效）
-cp -r Text-Multimodal <你的项目>/.agents/skills/
+cp -r text-multimodal <你的项目>/.agents/skills/
 ```
 
 ### 方法二：直接复制技能目录
 
-从任意来源（本仓库、他人分享）拿到 `Text-Multimodal/` 目录后：
+从任意来源（本仓库、他人分享）拿到 `text-multimodal/` 目录后：
 
 ```bash
 # 用户级（所有项目可用）
-cp -r Text-Multimodal ~/.agents/skills/
+cp -r text-multimodal ~/.agents/skills/
 
 # 项目级（仅该项目可用）
-cp -r Text-Multimodal <你的项目>/.agents/skills/
+cp -r text-multimodal <你的项目>/.agents/skills/
 ```
 
-> Windows 用户：可直接把 `Text-Multimodal` 文件夹复制到 `%USERPROFILE%\.agents\skills\` 或项目下的 `.agents\skills\` 里。
+> Windows 用户：可直接把 `text-multimodal` 文件夹复制到 `%USERPROFILE%\.agents\skills\` 或项目下的 `.agents\skills\` 里。
 
 ### 方法三：符号链接安装（更新即生效）
 
 ```bash
 mkdir -p ~/.agents/skills
-ln -s <克隆位置>/Text-Multimodal/Text-Multimodal ~/.agents/skills/Text-Multimodal
+ln -s <克隆位置>/Text-Multimodal/text-multimodal ~/.agents/skills/text-multimodal
 ```
 
 之后 `git pull` 更新仓库，技能立即生效，无需重复复制。
@@ -100,14 +102,14 @@ ln -s <克隆位置>/Text-Multimodal/Text-Multimodal ~/.agents/skills/Text-Multi
 ```bash
 git clone https://github.com/wxg-jmq/Text-Multimodal.git /tmp/Text-Multimodal
 mkdir -p ~/.agents/skills
-cp -r /tmp/Text-Multimodal/Text-Multimodal ~/.agents/skills/
+cp -r /tmp/Text-Multimodal/text-multimodal ~/.agents/skills/
 rm -rf /tmp/Text-Multimodal
 ```
 
 ### 验证安装
 
 - **新开一个会话**（技能列表通常在会话启动时加载），直接说"帮我生成一张图"或"识别这张图片"——能触发技能即安装成功
-- 或在支持斜杠命令的 Agent 里输入 `/Text-Multimodal` 强制加载
+- 或在支持斜杠命令的 Agent 里输入 `/text-multimodal` 强制加载
 
 ## 你需要准备什么
 
