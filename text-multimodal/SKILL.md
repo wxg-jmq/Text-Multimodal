@@ -29,7 +29,7 @@ description: 把文本模型升级为完整的多模态助手（看图、识视�
 - **A 档 · 全能**（有终端 + 文件系统 + 网络）：自建委托脚本，全自动施工
 - **B 档 · API**（无终端/文件系统，但有网络）：用内置联网能力直接调 API，素材用 Base64/URL 传递
 - **C 档 · 指令**（无任何工具）：产出施工包（脚本源码 + 命令 + 验证方法）交用户执行，用户回报输出后继续指导
-- **输入适配**：先探测客户端把图片交给主模型的方式（路径注入/附件通道/完全拦截），再决定"扔图"引导话术，见 `references/input.md`
+- **输入适配**：先探测客户端把图片交给主模型的方式——**四通道**（路径注入/附件/剪贴板提取/URL 直传），总有一条通；再决定"扔图"引导话术，见 `references/input.md`
 
 ## 模型来源：先查后要（详细规则见 references/matching.md）
 
@@ -86,8 +86,9 @@ description: 把文本模型升级为完整的多模态助手（看图、识视�
 - `references/matching.md` — 模型来源全流程（检测环境已有模型 → 要凭据 → 安全承诺 → 自动匹配 → 用户拍板）
 - `references/steps.md` — 阶段 0~4、7 施工细节与提示词撰写规范
 - `references/display.md` — 阶段 5~6 展示规范与客户端内联渲染补丁
-- `references/input.md` — 图片/视频输入适配协议（路径注入/附件/拦截三种模式）
+- `references/input.md` — 图片/视频输入适配协议（四通道：路径注入/附件/剪贴板提取/URL 直传）
 - `references/pitfalls.md` — 踩坑清单（遇到问题先查它）
 - `scripts/vision_probe.py` — 纯色探测图生成器（验证模型能否看图）
+- `scripts/clipboard_save.py` — 剪贴板图片提取（通道 C：桌面端"直接扔图"关键）
 - `scripts/delegate_skeleton.py` — 委托脚本骨架（适配器模式，与模型解耦）
 - `assets/tables.md` — 《环境已有模型能力表》《能力-模型匹配表》模板
