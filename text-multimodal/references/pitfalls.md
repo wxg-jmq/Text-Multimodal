@@ -4,6 +4,7 @@
 |---|---|
 | API Key 明文出现在输出/文档/日志 | 只存本地凭据文件，输出与日志一律掩码（`sk-***`），不写入任何生成物 |
 | 识别消息内容块缺 `type` 字段 → 上游报 "Invalid user message" | 图片/视频内容块必须按规范带 `type`：`{"type":"image_url","image_url":{...}}`、`{"type":"video_url","video_url":{...}}` |
+| Windows 控制台中文乱码/脚本无输出 | 脚本开头强制 UTF-8：`sys.stdout.reconfigure(encoding='utf-8')`（或 `python -X utf8` 运行），打印结果前统一处理编码 |
 | 客户端拦截图片输入（纯文本聊天模型）报"当前模型暂不支持图片" | 输入层拦截发生在技能运行之前：四通道依次尝试——路径/附件/剪贴板提取（桌面端 scripts/clipboard_save.py）/URL 直传，见 references/input.md |
 | 视频无法从剪贴板提取 | 剪贴板一般只存位图：视频走 路径/附件/URL 通道 |
 | 忽略环境已有模型，重复向用户索要凭据 | 先扫描 Agent 配置与本地配置，已有模型能覆盖的能力优先复用 |
