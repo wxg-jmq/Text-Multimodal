@@ -101,7 +101,7 @@ class OpenAiAdapter:
         body = {'model': CONFIG['recogModel'], 'max_tokens': 2000, 'messages': [{
             'role': 'user', 'content': [
                 {'type': 'text', 'text': instruction},
-                {block_type: {'url': to_data_url(media_path)}},
+                {'type': block_type, block_type: {'url': to_data_url(media_path)}},  # 必须带 type 字段（OpenAI 规范）
             ]}]}
         st, data = http_json('POST', f'{self.base}/chat/completions', self.headers, body)
         if st != 200:
