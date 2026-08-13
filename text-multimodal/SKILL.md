@@ -29,6 +29,7 @@ description: 把文本模型升级为完整的多模态助手（看图、识视�
 - **A 档 · 全能**（有终端 + 文件系统 + 网络）：自建委托脚本，全自动施工
 - **B 档 · API**（无终端/文件系统，但有网络）：用内置联网能力直接调 API，素材用 Base64/URL 传递
 - **C 档 · 指令**（无任何工具）：产出施工包（脚本源码 + 命令 + 验证方法）交用户执行，用户回报输出后继续指导
+- **输入适配**：先探测客户端把图片交给主模型的方式（路径注入/附件通道/完全拦截），再决定"扔图"引导话术，见 `references/input.md`
 
 ## 模型来源：先查后要（详细规则见 references/matching.md）
 
@@ -49,9 +50,9 @@ description: 把文本模型升级为完整的多模态助手（看图、识视�
 ## 阶段施工单（详细见 references/steps.md）
 
 - **阶段 0 委托通道**：统一脚本（可基于 `scripts/delegate_skeleton.py`），子命令契约 `recognize / imagegen / videorecognize / videogen`；**适配器模式**与模型解耦（换模型只换适配器+配置）；素材自动转 Data URL；结果存当前工作区 `media_out/`；网络调用带超时；统一错误格式；支持 `--dry-run`
-- **阶段 1 图片识别**：OpenAI 兼容 → `chat/completions` 多模态消息（text + image_url Data URL）；纯色探测通过后，用真实图片往返验证
+- **阶段 1 图片识别**：OpenAI 兼容 → `chat/completions` 多模态消息（text + image_url Data URL）；纯色探测通过后，用真实图片往返验证；图片输入方式（路径/附件/拦截）按 `references/input.md` 适配
 - **阶段 2 图片生成**：`/images/generations`；`b64_json` 必须放 `extra_body` 内（顶层无效）；返回兼容 b64/url 两种；图生图/多图合成传 `extra_body.image`；生成后回读识别对比
-- **阶段 3 视频识别**：chat 接口 `video_url` 内容块；`--max-tokens` 8000+；复杂分析加 `thinking`（若模型支持）；视频 >80MB 先压缩
+- **阶段 3 视频识别**：chat 接口 `video_url` 内容块；`--max-tokens` 8000+；复杂分析加 `thinking`（若模型支持）；视频 >80MB 先压缩；视频输入方式同样按 `references/input.md` 适配
 - **阶段 4 视频生成**：任务式三步（提交 → 轮询 → 下载）；`num_frames` ≤ 上限且满足 8n+1（如 81/121/241/441，时长 = 帧数 ÷ fps，推荐 24fps）；限流/队列满退避重试；多域名时选带存储桶的端点（先实测一单）；下载失败如实报告任务 id 与地址
 - **阶段 5 展示规范**：见 `references/display.md`（`media_out/` 相对路径、PIL verify、>3MB 或宽 >2000px 缩放 1024、视频用 Markdown 图片语法 + moov 前置 faststart + 体积 < 实测上限）
 - **阶段 6 客户端内联渲染**：默认不支持才修补（Electron 套路 + 自愈机制），见 `references/display.md`
@@ -85,6 +86,7 @@ description: 把文本模型升级为完整的多模态助手（看图、识视�
 - `references/matching.md` — 模型来源全流程（检测环境已有模型 → 要凭据 → 安全承诺 → 自动匹配 → 用户拍板）
 - `references/steps.md` — 阶段 0~4、7 施工细节与提示词撰写规范
 - `references/display.md` — 阶段 5~6 展示规范与客户端内联渲染补丁
+- `references/input.md` — 图片/视频输入适配协议（路径注入/附件/拦截三种模式）
 - `references/pitfalls.md` — 踩坑清单（遇到问题先查它）
 - `scripts/vision_probe.py` — 纯色探测图生成器（验证模型能否看图）
 - `scripts/delegate_skeleton.py` — 委托脚本骨架（适配器模式，与模型解耦）
