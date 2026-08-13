@@ -25,7 +25,7 @@
 ## 目录结构
 
 ```
-Text-Multimodal/             # 仓库根（克隆后的目录名 = 仓库名）
+text-multimodal/             # 仓库根（克隆后的目录名 = 仓库名）
 ├── README.md                # 本说明
 └── text-multimodal/         # 技能目录（安装时复制这一层）
     ├── SKILL.md             # 主文件：流程速览、铁律、完成定义（触发即加载）
@@ -49,8 +49,8 @@ Text-Multimodal/             # 仓库根（克隆后的目录名 = 仓库名）
 
 ```bash
 # 1. 克隆仓库
-git clone https://github.com/wxg-jmq/Text-Multimodal.git
-cd Text-Multimodal
+git clone https://github.com/wxg-jmq/text-multimodal.git
+cd text-multimodal
 
 # 2. 复制技能目录到用户级位置（全局可用，所有支持技能的 Agent 通用）
 mkdir -p ~/.agents/skills
@@ -78,7 +78,7 @@ cp -r text-multimodal <你的项目>/.agents/skills/
 
 ```bash
 mkdir -p ~/.agents/skills
-ln -s <克隆位置>/Text-Multimodal/text-multimodal ~/.agents/skills/text-multimodal
+ln -s <克隆位置>/text-multimodal/text-multimodal ~/.agents/skills/text-multimodal
 ```
 
 之后 `git pull` 更新仓库，技能立即生效，无需重复复制。
@@ -100,10 +100,10 @@ ln -s <克隆位置>/Text-Multimodal/text-multimodal ~/.agents/skills/text-multi
 ### 方法六：一键安装（从 GitHub 直接装到用户级目录）
 
 ```bash
-git clone https://github.com/wxg-jmq/Text-Multimodal.git /tmp/Text-Multimodal
+git clone https://github.com/wxg-jmq/text-multimodal.git /tmp/text-multimodal
 mkdir -p ~/.agents/skills
-cp -r /tmp/Text-Multimodal/text-multimodal ~/.agents/skills/
-rm -rf /tmp/Text-Multimodal
+cp -r /tmp/text-multimodal/text-multimodal ~/.agents/skills/
+rm -rf /tmp/text-multimodal
 ```
 
 ### 验证安装
